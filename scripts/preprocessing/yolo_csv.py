@@ -47,7 +47,7 @@ def main():
   for f in file_list:
     file = open(f, 'r')
     filename = Path(f).stem
-    img_name = filename + '.png'
+    img_name = filename + '.jpg'
     print("Processing example: {}".format(img_name))
     try:
       img_file = Image.open(args.input_path + img_name)
@@ -117,7 +117,7 @@ def main():
       'image/filename'          : dataset_util.bytes_feature(img_name.encode('utf8')),
       'image/source_id'         : dataset_util.bytes_feature(img_name.encode('utf8')),
       'image/encoded'           : dataset_util.bytes_feature(encoded_jpg),
-      'image/format'            : dataset_util.bytes_feature(b'png'),
+      'image/format'            : dataset_util.bytes_feature(b'jpg'),
       'image/object/bbox/xmin'  : dataset_util.float_list_feature(xmins),
       'image/object/bbox/xmax'  : dataset_util.float_list_feature(xmaxs),
       'image/object/bbox/ymin'  : dataset_util.float_list_feature(ymins),
