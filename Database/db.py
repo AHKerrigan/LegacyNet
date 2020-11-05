@@ -1,6 +1,6 @@
 # Python-Sqlite cemetery database.
 # this file will provide all backend functionalities for the databse-editing gui.
-# table requirements: cemetery name (filename), headstone id (count or rng), row, col, headstone bbox-global coord (four-corners), headstone centroid.
+# table requirements: headstone id (count or rng), row, col, headstone bbox-global coord (four-corners), headstone centroid.
 
 import sqlite3
 import re
@@ -93,7 +93,7 @@ def populateTable(tablename: str, container: str) -> None:
     conn.commit()
     conn.close()
 
-# create a table, (enter table name, one-click add).
+# create a table.
 def createTable(tablename: str) -> None:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
@@ -117,7 +117,7 @@ def createTable(tablename: str) -> None:
     conn.commit()
     conn.close()
 
-# delete an enitre table (enter table name, verify action, one-click delete).
+# delete an enitre table.
 def deleteTable(tablename: str) -> None:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
@@ -137,9 +137,11 @@ def deleteTable(tablename: str) -> None:
     conn.commit()
     conn.close()
 
-# add a table entry (enter tablename and all values in csv format).
+# add a table entry.
 def addEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: float, toprx: float, topry: float, botlx: float, botly: float, botrx: float, botry: float, centroidx: float, centroidy: float) -> None:
     #id, row, col, toplx, toply, toprx, topry, botlx, botly, botrx, botry, centroidx, centroidy = values.split(',')
+    if not isValidCemetery(tablename):
+        return
     if not isValidID(id):
         return
     if not isValidOrder(row) or not isValidOrder(col):
@@ -164,9 +166,11 @@ def addEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: f
     conn.commit()
     conn.close()
 
-# edit a table entry based on headstone id (enter table name, headstone ID, and updated features (csv format), one-click edit).
+# edit a table entry based on headstone id.
 def editEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: float, toprx: float, topry: float, botlx: float, botly: float, botrx: float, botry: float, centroidx: float, centroidy: float) -> None:
     #row, col, toplx, toply, toprx, topry, botlx, botly, botrx, botry, centroidx, centroidy = values.split(',')
+    if not isValidCemetery(tablename):
+        return
     if not isValidID(id):
         return 
     if not isValidOrder(row) or not isValidOrder(col):
@@ -191,7 +195,7 @@ def editEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: 
     conn.commit()
     conn.close()
 
-# delete a table entry based on headstone id (enter headstone id, verify action, one-click delete).
+# delete a table entry based on headstone id.
 def deleteEntry(tablename: str, id: int) -> None:
     if not isValidID(id):
         return 
@@ -213,7 +217,7 @@ def deleteEntry(tablename: str, id: int) -> None:
     conn.commit()
     conn.close()
 
-# search table entries by ID (enter ID range, provide a list of all results).
+# search table entries by ID.
 def searchTable(tablename: str, start_id: str, finish_id) -> list:
     if not isValidID(start_id) or not isValidID(finish_id):
         return
@@ -240,7 +244,7 @@ def searchTable(tablename: str, start_id: str, finish_id) -> list:
     conn.close()
     return result
 
-# view/order table with specified feature (enter feature to view specific entries, order view by specified feature)
+# view/order table with specified feature.
 def orderTable(tablename: str, feature: str, sort: str) -> list:
     if sort.lower() == "asc" or sort.lower() == "desc":
         pass
@@ -288,7 +292,7 @@ def df_to_geojson(df, properties, toplx = 'toplx', toply = 'toply', toprx = 'top
         geojson['features'].append(feature)
     return geojson
 
-# (complete) store entries in a pandas dataframe, export table to geojson file (one-click export).
+# store entries in a pandas dataframe, export table to geojson file.
 def exportTable(tablename: str) -> None:
     output_filename = tablename + '.geojson'
     conn = sqlite3.connect(cemetery)
@@ -312,17 +316,17 @@ def exportTable(tablename: str) -> None:
         json.dump(geojson, output_file, indent = 2)
 
 # test functions.
-print(isValidCemetery("ce"))
-print(isValidID("0099887"))
-print(isValidOrder("1000"))
-print(isValidCoord("-000006.7"))
-print(createTable("test"))
-print(addEntry("test", "119887","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
-print(addEntry("test", "5","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
-print(addEntry("test", "105","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
-print(editEntry("test", "0099887", "16","22","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
-print(deleteEntry("test", "1111111"))
-print(searchTable("test", "1", "10"))
-print(orderTable("test", "id", "DESC"))
-print(orderTable("test", "id", "ASC"))
-print(exportTable("test"))
+# print(isValidCemetery("ce"))
+# print(isValidID("0099887"))
+# print(isValidOrder("1000"))
+# print(isValidCoord("-000006.7"))
+# print(createTable("test"))
+# print(addEntry("test", "119887","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+# print(addEntry("test", "5","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+# print(addEntry("test", "105","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+# print(editEntry("test", "0099887", "16","22","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+# print(deleteEntry("test", "1111111"))
+# print(searchTable("test", "1", "10"))
+# print(orderTable("test", "id", "DESC"))
+# print(orderTable("test", "id", "ASC"))
+# print(exportTable("test"))
