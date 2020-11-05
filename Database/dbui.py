@@ -62,9 +62,9 @@ class UI_Database(QMainWindow):
         self.ExportGeoJSON.setText(_translate("Database", "Export GeoJSON"))
 
     def export_popup(self):
-        item, ok = QInputDialog.getText(self, "Select Table To Export", "Export Table:")
-        if ok and item:
-            db.exportTable(item)
+        table, ok = QInputDialog.getText(self, "Select Table To Export", "Export Table:")
+        if ok and table:
+            db.exportTable(table)
 
     def order_popup(self):
         orderGroupBox = QGroupBox("Order Database Table By Feature")
@@ -278,19 +278,20 @@ class UI_Database(QMainWindow):
         orderButtonBox.rejected.connect(self.close)
 
     def deleteTable_popup(self):
-        item, ok = QInputDialog.getText(self, "Enter Table To Delete", "Table To Delete:")
-        if ok and item:
-            db.deleteTable(item)
+        table, ok = QInputDialog.getText(self, "Enter Table To Delete", "Table To Delete:")
+        if ok and table:
+            db.deleteTable(table)
 
     def createTable_popup(self):
-        item, ok = QInputDialog.getText(self, "Enter Table To Create", "Table To Create:")
-        if ok and item:
-            db.createTable(item)
+        table, ok = QInputDialog.getText(self, "Enter Table To Create", "Table To Create:")
+        if ok and table:
+            db.createTable(table)
 
+    # NOTE: Needs container to be passed from import.
     def populateTable_popup(self):
-        item, ok = QInputDialog.getText(self, "Enter Table To Auto-Populate", "Table To Auto-Populate:")
-        if ok and item:
-            db.PopulateTable(item, _)
+        table, ok = QInputDialog.getText(self, "Enter Table To Auto-Populate", "Table To Auto-Populate:")
+        if ok and table:
+            db.populateTable(table, container)
 
 if __name__ == "__main__":
     import sys

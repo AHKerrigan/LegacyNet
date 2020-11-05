@@ -6,7 +6,6 @@ import sqlite3
 import re
 import json
 import pandas as pd
-from csv import reader, writer
 
 # change database name here, to apply functions to a different database.
 cemetery = "cemetery.db"
@@ -57,22 +56,6 @@ def isValidGeoJSON(filename: str) -> bool:
     if filename and re.match(pattern, filename):
         return True 
     print("File name format is incorrect.")
-    return False
-
-# NOTE: (might not need when deployed) validate csv file.
-def isValidCSV(filename: str) -> bool:
-    pattern = re.compile('^[a-zA-Z0-9 -_]+.csv$')
-    if filename and re.match(pattern, filename):
-        return True 
-    print("File is not a CSV file.")
-    return False
-
-# NOTE: (might not need when deployed) validate yolo txt file.
-def isValidTXT(filename: str) -> bool:
-    pattern = re.compile('^[a-zA-Z0-9 -_]+.txt$')
-    if filename and re.match(pattern, filename):
-        return True 
-    print("File is not a TXT file.")
     return False
 
 # NOTE: (not in use) get cemetery name, from yolo file or any other source.
@@ -289,12 +272,6 @@ def orderTable(tablename: str, feature: str, sort: str) -> list:
     conn.close()
     return result
 
-# NOTE: (to be removed) csv and yolo txt file should have the same name, diff extension.
-# edit yolo text file to update bboxes (as table is edited (time-consuming) or after editing (more efficient, one-click update)) (enter table corresponding to yolo text file).
-def updateLabels(tablename: str, yolofile: str, csvfile: str) -> None:
-    # To update the yolo files bboxes, we need to reverse the coordinates to pixel coordinates.
-    return
-
 # convert a pandas dataframe into gejson format.
 def df_to_geojson(df, properties, toplx = 'toplx', toply = 'toply', toprx = 'toprx', topry = 'topry', botlx = 'botlx', botly = 'botly', botrx = 'botrx', botry = 'botry', centroidx = 'centroidx', centroidy = 'centroidy') -> dict:
     geojson = {'type':'FeatureCollection', 'name': getCemeteryName("Arlington"), 'features':[]}
@@ -335,18 +312,17 @@ def exportTable(tablename: str) -> None:
         json.dump(geojson, output_file, indent = 2)
 
 # test functions.
-# print(isValidCemetery("ce"))
-# print(isValidID("0099887"))
-# print(isValidOrder("1000"))
-# print(isValidCoord("-000006.7"))
-# print(createTable("test"))
-# print(populateTable("test.csv", "test"))
-# print(addEntry("test", "119887,17,23,+11.1999000456789,-10.1123123123123,-23.2000111111111,+32.21112229907,-03.3333333333333,+3.3333333333333,-41.477777777777790,-4.47777777779990,50.660606060606060,5.660606060606060"))
-# print(addEntry("test", "5,17,23,+11.1999000456789,-10.1123123123123,-23.2000111111111,+32.21112229907,-03.3333333333333,+3.3333333333333,-41.477777777777790,-4.47777777779990,50.660606060606060,5.660606060606060"))
-# print(addEntry("test", "105,17,23,+11.1999000456789,-10.1123123123123,-23.2000111111111,+32.21112229907,-03.3333333333333,+3.3333333333333,-41.477777777777790,-4.47777777779990,50.660606060606060,5.660606060606060"))
-# print(editEntry("test", "0099887", "16,22,+11.1999000456789,-10.1123123123123,-23.2000111111111,+32.21112229907,-03.3333333333333,+3.3333333333333,-41.477777777777790,-4.47777777779990,50.660606060606060,5.660606060606060"))
-# print(deleteEntry("test", "1111111"))
-# print(searchTable("test", "1", "10"))
-# print(orderTable("test", "id", "DESC"))
-# print(orderTable("test", "id", "ASC"))
-# print(exportTable("test"))
+print(isValidCemetery("ce"))
+print(isValidID("0099887"))
+print(isValidOrder("1000"))
+print(isValidCoord("-000006.7"))
+print(createTable("test"))
+print(addEntry("test", "119887","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+print(addEntry("test", "5","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+print(addEntry("test", "105","17","23","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+print(editEntry("test", "0099887", "16","22","+11.1999000456789","-10.1123123123123","-23.2000111111111","+32.21112229907","-03.3333333333333","+3.3333333333333","-41.477777777777790","-4.47777777779990","50.660606060606060","5.660606060606060"))
+print(deleteEntry("test", "1111111"))
+print(searchTable("test", "1", "10"))
+print(orderTable("test", "id", "DESC"))
+print(orderTable("test", "id", "ASC"))
+print(exportTable("test"))
