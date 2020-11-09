@@ -34,20 +34,6 @@ class UI_Database(QMainWindow):
         self.ExportGeoJSON = QtWidgets.QPushButton(Database)
         self.ExportGeoJSON.setGeometry(QtCore.QRect(10, 250, 150, 45))
         self.ExportGeoJSON.setObjectName("ExportGeoJSON")
-        mainLayout = QVBoxLayout()
-        central_widget = QWidget()
-        central_widget.setLayout(mainLayout)
-        mainLayout.addWidget(self.PopulateTable)
-        mainLayout.addWidget(self.CreateTable)
-        mainLayout.addWidget(self.DeleteTable)
-        mainLayout.addWidget(self.AddEntry)
-        mainLayout.addWidget(self.EditEntry)
-        mainLayout.addWidget(self.DeleteEntry)
-        mainLayout.addWidget(self.SearchTable)
-        mainLayout.addWidget(self.OrderTable)
-        mainLayout.addWidget(self.ExportGeoJSON)
-        self.setCentralWidget(central_widget)
-        self.show()
 
         self.retranslateUI(Database)
         QtCore.QMetaObject.connectSlotsByName(Database)
@@ -76,14 +62,28 @@ class UI_Database(QMainWindow):
         self.ExportGeoJSON.setText(_translate("Database", "Export GeoJSON"))
 
     def export_popup(self):
-        table, ok = QInputDialog.getText(self, "Select Table To Export", "Export Table:")
-        if ok and table:
-            db.exportTable(table)
+        exportGroupBox = QGroupBox("Export table to GeoJSON")
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
+        layout = QFormLayout()
+        layout.addRow(QLabel("Export"), tablename)
+        exportGroupBox.setLayout(layout)
+        exportButtonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        mainExportLayout = QVBoxLayout()
+        central_widget = QWidget()
+        central_widget.setLayout(mainExportLayout)
+        mainExportLayout.addWidget(exportGroupBox)
+        mainExportLayout.addWidget(exportButtonBox)
+        self.setCentralWidget(central_widget)
+        self.show()
+        exportButtonBox.accepted.connect(lambda: db.exportTable(tablename.currentText()))
+        exportButtonBox.accepted.connect(self.close)
+        exportButtonBox.rejected.connect(self.close)
 
     def order_popup(self):
         orderGroupBox = QGroupBox("Order Database Table By Feature")
-        orderGroupBox.setWindowTitle("Sorted View")
-        tablename = QLineEdit()
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
         feature = QComboBox()
         feature.addItems(['id', 'row', 'col', 
             'toplx', 'toply', 'toprx', 'topry', 
@@ -106,16 +106,17 @@ class UI_Database(QMainWindow):
         self.show()
         orderButtonBox.accepted.connect(lambda: self.displayTable(
             db.orderTable(
-                tablename.text(), 
+                tablename.currentText(), 
                 feature.currentText(), 
                 order.currentText())))
         orderButtonBox.rejected.connect(self.close)
 
     def search_popup(self):
         orderGroupBox = QGroupBox("View Range")
-        orderGroupBox.setWindowTitle("Range View")
-        tablename = QLineEdit()
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
         min_id = QLineEdit()
+        min_id.setText('0')
         max_id = QLineEdit()
         layout = QFormLayout()
         layout.addRow(QLabel("Table"), tablename)
@@ -130,13 +131,14 @@ class UI_Database(QMainWindow):
         mainOrderLayout.addWidget(orderButtonBox)
         self.setCentralWidget(central_widget)
         self.show()
-        orderButtonBox.accepted.connect(lambda: self.displayTable(db.searchTable(tablename.text(), min_id.text(), max_id.text())))
+        orderButtonBox.accepted.connect(lambda: self.displayTable(db.searchTable(tablename.currentText(), min_id.text(), max_id.text())))
         orderButtonBox.rejected.connect(self.close)
         return 
 
     def displayTable(self, ordered_list):
         ordered_table = QTableWidget()
-        ordered_table.setWindowTitle("Custom View")
+        if ordered_list == None:
+            ordered_list = []
         ordered_table.setRowCount(len(ordered_list))
         ordered_table.setColumnCount(13)
         ordered_table.setFixedWidth(ordered_table.columnWidth(0) * 13)
@@ -174,9 +176,10 @@ class UI_Database(QMainWindow):
 
     def deleteEntry_popup(self):
         orderGroupBox = QGroupBox("Headstone To Delete")
-        orderGroupBox.setWindowTitle("Headstone To Delete")
-        tablename = QLineEdit()
-        hid = QLineEdit()
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
+        hid = QComboBox()
+        hid.addItems(db.getIDs(tablename.currentText()))
         layout = QFormLayout()
         layout.addRow(QLabel("Table"), tablename)
         layout.addRow(QLabel("ID"), hid)
@@ -189,15 +192,16 @@ class UI_Database(QMainWindow):
         mainOrderLayout.addWidget(orderButtonBox)
         self.setCentralWidget(central_widget)
         self.show()
-        orderButtonBox.accepted.connect(lambda: db.deleteEntry(tablename.text(), hid.text()))
+        orderButtonBox.accepted.connect(lambda: db.deleteEntry(tablename.currentText(), hid.currentText()))
         orderButtonBox.accepted.connect(self.close)
         orderButtonBox.rejected.connect(self.close)
 
     def editEntry_popup(self):
         orderGroupBox = QGroupBox("Edit An Entry")
-        orderGroupBox.setWindowTitle("Edit An Entry")
-        tablename = QLineEdit()
-        hid = QLineEdit()
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
+        hid = QComboBox()
+        hid.addItems(db.getIDs(tablename.currentText()))
         row = QLineEdit()
         col = QLineEdit()
         toplx = QLineEdit()
@@ -234,8 +238,20 @@ class UI_Database(QMainWindow):
         mainOrderLayout.addWidget(orderButtonBox)
         self.setCentralWidget(central_widget)
         self.show()
+        hid.activated.connect(lambda: row.setText(db.getRow(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: col.setText(db.getCol(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: toplx.setText(db.getToplx(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: toply.setText(db.getToply(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: toprx.setText(db.getToprx(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: topry.setText(db.getTopry(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: botlx.setText(db.getBotlx(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: botly.setText(db.getBotly(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: botrx.setText(db.getBotrx(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: botry.setText(db.getBotry(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: centroidx.setText(db.getCentroidx(tablename.currentText(), hid.currentText())))
+        hid.activated.connect(lambda: centroidy.setText(db.getCentroidy(tablename.currentText(), hid.currentText())))
         orderButtonBox.accepted.connect(lambda: db.editEntry(
-            tablename.text(), hid.text(), row.text(), col.text(), 
+            tablename.currentText(), hid.text(), row.text(), col.text(), 
             toplx.text(), toply.text(), toprx.text(), topry.text(), 
             botlx.text(), botly.text(), botrx.text(), botry.text(), 
             centroidx.text(), centroidy.text()))
@@ -244,8 +260,8 @@ class UI_Database(QMainWindow):
 
     def addEntry_popup(self):
         orderGroupBox = QGroupBox("Add An Entry")
-        orderGroupBox.setWindowTitle("Add An Entry")
-        tablename = QLineEdit()
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
         hid = QLineEdit()
         row = QLineEdit()
         col = QLineEdit()
@@ -284,7 +300,7 @@ class UI_Database(QMainWindow):
         self.setCentralWidget(central_widget)
         self.show()
         orderButtonBox.accepted.connect(lambda: db.addEntry(
-            tablename.text(), hid.text(), row.text(), col.text(), 
+            tablename.currentText(), hid.text(), row.text(), col.text(), 
             toplx.text(), toply.text(), toprx.text(), topry.text(), 
             botlx.text(), botly.text(), botrx.text(), botry.text(), 
             centroidx.text(), centroidy.text()))
@@ -292,20 +308,58 @@ class UI_Database(QMainWindow):
         orderButtonBox.rejected.connect(self.close)
 
     def deleteTable_popup(self):
-        table, ok = QInputDialog.getText(self, "Enter Table To Delete", "Table To Delete:")
-        if ok and table:
-            db.deleteTable(table)
+        deleteGroupBox = QGroupBox("Delete Table")
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
+        layout = QFormLayout()
+        layout.addRow(QLabel("Delete"), tablename)
+        deleteGroupBox.setLayout(layout)
+        deleteButtonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        mainDeleteLayout = QVBoxLayout()
+        central_widget = QWidget()
+        central_widget.setLayout(mainDeleteLayout)
+        mainDeleteLayout.addWidget(deleteGroupBox)
+        mainDeleteLayout.addWidget(deleteButtonBox)
+        self.setCentralWidget(central_widget)
+        self.show()
+        deleteButtonBox.accepted.connect(lambda: db.deleteTable(tablename.currentText()))
+        deleteButtonBox.accepted.connect(self.close)
+        deleteButtonBox.rejected.connect(self.close)
 
     def createTable_popup(self):
         table, ok = QInputDialog.getText(self, "Enter Table To Create", "Table To Create:")
         if ok and table:
             db.createTable(table)
 
-    # NOTE: Needs container to be passed from import.
+    # ***(VERSION 1)*** NOTE: Needs container to be passed from import.
+    # def populateTable_popup(self):
+    #     table, ok = QInputDialog.getText(self, "Enter Table To Auto-Populate", "Table To Auto-Populate:")
+    #     if ok and table:
+    #         db.populateTable(table, container)
+
+    # ***(VERESION 2)*** NOTE:Needs container to be passed from import.
     def populateTable_popup(self):
-        table, ok = QInputDialog.getText(self, "Enter Table To Auto-Populate", "Table To Auto-Populate:")
-        if ok and table:
-            db.populateTable(table, container)
+        populateGroupBox = QGroupBox("Populate Table")
+        tablename = QComboBox()
+        tablename.addItems(db.getTables())
+        layout = QFormLayout()
+        layout.addRow(QLabel("Populate"), tablename)
+        populateGroupBox.setLayout(layout)
+        populateButtonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        mainPopulateLayout = QVBoxLayout()
+        central_widget = QWidget()
+        central_widget.setLayout(mainPopulateLayout)
+        mainPopulateLayout.addWidget(populateGroupBox)
+        mainPopulateLayout.addWidget(populateButtonBox)
+        self.setCentralWidget(central_widget)
+        self.show()
+        populateButtonBox.accepted.connect(lambda: db.populateTable(tablename.currentText(), container))
+        populateButtonBox.accepted.connect(self.close)
+        populateButtonBox.rejected.connect(self.close)
+
+    # ***(VERSION 3)*** NOTE: Instead of passing a table name from user input, just call function on line 49 above.
+    # This requires commenting out lines 333-350, then proceed by adjusting line 49, as such:
+    # self.PopulateTable.clicked.connect(db.populateTable(tablename, container)), where tablename and container are passed from external code.
 
 if __name__ == "__main__":
     import sys
@@ -313,5 +367,5 @@ if __name__ == "__main__":
     Database = QtWidgets.QWidget()
     ui = UI_Database()
     ui.setupUI(Database)
-    #Database.show()
+    Database.show()
     sys.exit(app.exec_())

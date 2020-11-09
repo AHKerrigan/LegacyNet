@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "name": "Arlington",
+  "name": "",
   "features": [
     {
       "type": "Feature",
@@ -543,6 +543,45 @@
             [
               11.1999000456789,
               -10.1123123123123
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 777,
+        "row": 1,
+        "col": 2,
+        "centroid": [
+          1.16,
+          1.16
+        ]
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              1.16,
+              1.16
+            ],
+            [
+              1.16,
+              1.16
+            ],
+            [
+              1.16,
+              1.16
+            ],
+            [
+              1.16,
+              1.16
+            ],
+            [
+              1.16,
+              1.16
             ]
           ]
         ]
