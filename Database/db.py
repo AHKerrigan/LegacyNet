@@ -40,7 +40,7 @@ def isValidCoord(coord: str) -> bool:
 
 # validate whether input is a valid feature in table.
 def isValidFeature(feature: str) -> bool:
-    features = set(['id', 'row', 'col', 'toplx', 'toply', 'toprx', 'topry', 'botlx', 'botly', 'botrx', 'botry', 'centroidx', 'centroidy']) 
+    features = set(['id', 'row', 'col', 'coord1x', 'coord1y', 'coord2x', 'coord2y', 'coord3x', 'coord3y', 'coord4x', 'coord4y', 'centx', 'centy']) 
     if feature and feature in features:
         return True
     return False
@@ -98,105 +98,105 @@ def getCol(tablename: str, hid: int) -> str:
     conn.close()
     return str(col[0])
 
-# get toplx from specific headstone.
-def getToplx(tablename: str, hid: int) -> str:
+# get coord1x from specific headstone.
+def getCoord1x(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT toplx FROM {tablename} WHERE id = {hid};")
-    toplx = c.fetchone()
+    c.execute(f"SELECT coord1x FROM {tablename} WHERE id = {hid};")
+    coord1x = c.fetchone()
     conn.commit()
     conn.close()
-    return str(toplx[0])
+    return str(coord1x[0])
 
-# get toply from specific headstone.
-def getToply(tablename: str, hid: int) -> str:
+# get coord1y from specific headstone.
+def getCoord1y(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT toply FROM {tablename} WHERE id = {hid};")
-    toply = c.fetchone()
+    c.execute(f"SELECT coord1y FROM {tablename} WHERE id = {hid};")
+    coord1y = c.fetchone()
     conn.commit()
     conn.close()
-    return str(toply[0])
+    return str(coord1y[0])
 
-# get toprx from specific headstone.
-def getToprx(tablename: str, hid: int) -> str:
+# get coord2x from specific headstone.
+def getCoord2x(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT toprx FROM {tablename} WHERE id = {hid};")
-    toprx = c.fetchone()
+    c.execute(f"SELECT coord2x FROM {tablename} WHERE id = {hid};")
+    coord2x = c.fetchone()
     conn.commit()
     conn.close()
-    return str(toprx[0])
+    return str(coord2x[0])
 
-# get topry from specific headstone.
-def getTopry(tablename: str, hid: int) -> str:
+# get coord2y from specific headstone.
+def getCoord2y(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT topry FROM {tablename} WHERE id = {hid};")
-    topry = c.fetchone()
+    c.execute(f"SELECT coord2y FROM {tablename} WHERE id = {hid};")
+    coord2y = c.fetchone()
     conn.commit()
     conn.close()
-    return str(topry[0])
+    return str(coord2y[0])
 
-# get botlx from specific headstone.
-def getBotlx(tablename: str, hid: int) -> str:
+# get coord3x from specific headstone.
+def getCoord3x(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT botlx FROM {tablename} WHERE id = {hid};")
-    botlx = c.fetchone()
+    c.execute(f"SELECT coord3x FROM {tablename} WHERE id = {hid};")
+    coord3x = c.fetchone()
     conn.commit()
     conn.close()
-    return str(botlx[0])
+    return str(coord3x[0])
 
-# get botly from specific headstone.
-def getBotly(tablename: str, hid: int) -> str:
+# get coord3y from specific headstone.
+def getCoord3y(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT botly FROM {tablename} WHERE id = {hid};")
-    botly = c.fetchone()
+    c.execute(f"SELECT coord3y FROM {tablename} WHERE id = {hid};")
+    coord3y = c.fetchone()
     conn.commit()
     conn.close()
-    return str(botly[0])
+    return str(coord3y[0])
 
-# get botrx from specific headstone.
-def getBotrx(tablename: str, hid: int) -> str:
+# get coord4x from specific headstone.
+def getCoord4x(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT botrx FROM {tablename} WHERE id = {hid};")
-    botrx = c.fetchone()
+    c.execute(f"SELECT coord4x FROM {tablename} WHERE id = {hid};")
+    coord4x = c.fetchone()
     conn.commit()
     conn.close()
-    return str(botrx[0])
+    return str(coord4x[0])
 
-# get botry from specific headstone.
-def getBotry(tablename: str, hid: int) -> str:
+# get coord4y from specific headstone.
+def getCoord4y(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT botry FROM {tablename} WHERE id = {hid};")
-    botry = c.fetchone()
+    c.execute(f"SELECT coord4y FROM {tablename} WHERE id = {hid};")
+    coord4y = c.fetchone()
     conn.commit()
     conn.close()
-    return str(botry[0])
+    return str(coord4y[0])
 
-# get centroidx from specific headstone.
-def getCentroidx(tablename: str, hid: int) -> str:
+# get centx from specific headstone.
+def getCentx(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT centroidx FROM {tablename} WHERE id = {hid};")
-    centroidx = c.fetchone()
+    c.execute(f"SELECT centx FROM {tablename} WHERE id = {hid};")
+    centx = c.fetchone()
     conn.commit()
     conn.close()
-    return str(centroidx[0])
+    return str(centx[0])
 
-# get centroidy from specific headstone.
-def getCentroidy(tablename: str, hid: int) -> str:
+# get centy from specific headstone.
+def getCenty(tablename: str, hid: int) -> str:
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
-    c.execute(f"SELECT centroidy FROM {tablename} WHERE id = {hid};")
-    centroidy = c.fetchone()
+    c.execute(f"SELECT centy FROM {tablename} WHERE id = {hid};")
+    centy = c.fetchone()
     conn.commit()
     conn.close()
-    return str(centroidy[0])
+    return str(centy[0])
 
 # NOTE: (input parameters might need changing) MAIN METHOD- populate table based on cemetery (enter filename and tablename, one-click create).
 def populateTable(tablename: str, container: str) -> None:
@@ -205,9 +205,9 @@ def populateTable(tablename: str, container: str) -> None:
     try:
         create = f'''CREATE TABLE IF NOT EXISTS {tablename} 
             (id INTEGER UNIQUE, row INTEGER, col INTEGER, 
-            toplx FLOAT, toply FLOAT, toprx FLOAT, topry FLOAT, 
-            botlx FLOAT, botly FLOAT, botrx FLOAT, botry FLOAT,
-            centroidx FLOAT, centroidy FLOAT);'''
+            coord1x FLOAT, coord1y FLOAT, coord2x FLOAT, coord2y FLOAT, 
+            coord3x FLOAT, coord3y FLOAT, coord4x FLOAT, coord4y FLOAT,
+            centx FLOAT, centy FLOAT);'''
         c.execute(create)
     except conn.Error as e:
         conn.commit()
@@ -232,9 +232,9 @@ def createTable(tablename: str) -> None:
     try:
         create = f'''CREATE TABLE IF NOT EXISTS {tablename} 
             (id INTEGER UNIQUE, row INTEGER, col INTEGER, 
-            toplx FLOAT, toply FLOAT, toprx FLOAT, topry FLOAT, 
-            botlx FLOAT, botly FLOAT, botrx FLOAT, botry FLOAT,
-            centroidx FLOAT, centroidy FLOAT);'''
+            coord1x FLOAT, coord1y FLOAT, coord2x FLOAT, coord2y FLOAT, 
+            coord3x FLOAT, coord3y FLOAT, coord4x FLOAT, coord4y FLOAT,
+            centx FLOAT, centy FLOAT);'''
         c.execute(create)
     except conn.Error as e:
         conn.commit()
@@ -270,21 +270,21 @@ def deleteTable(tablename: str) -> None:
     conn.close()
 
 # add a table entry.
-def addEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: float, toprx: float, topry: float, botlx: float, botly: float, botrx: float, botry: float, centroidx: float, centroidy: float) -> None:
-    #id, row, col, toplx, toply, toprx, topry, botlx, botly, botrx, botry, centroidx, centroidy = values.split(',')
+def addEntry(tablename: str, hid: int, row: int, col: int, coord1x: float, coord1y: float, coord2x: float, coord2y: float, coord3x: float, coord3y: float, coord4x: float, coord4y: float, centx: float, centy: float) -> None:
+    #id, row, col, coord1x, coord1y, coord2x, coord2y, coord3x, coord3y, coord4x, coord4y, centx, centy = values.split(',')
     if not isValidCemetery(tablename):
         return
-    if not isValidID(id):
+    if not isValidID(hid):
         return
     if not isValidOrder(row) or not isValidOrder(col):
         return 
-    if not isValidCoord(toplx) or not isValidCoord(toply) or not isValidCoord(toprx) or not isValidCoord(topry) or not isValidCoord(botlx) or not isValidCoord(botly) or not isValidCoord(botrx) or not isValidCoord(botry) or not isValidCoord(centroidx) or not isValidCoord(centroidy):
+    if not isValidCoord(coord1x) or not isValidCoord(coord1y) or not isValidCoord(coord2x) or not isValidCoord(coord2y) or not isValidCoord(coord3x) or not isValidCoord(coord3y) or not isValidCoord(coord4x) or not isValidCoord(coord4y) or not isValidCoord(centx) or not isValidCoord(centy):
         return
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
     try:
         add = f"INSERT OR REPLACE INTO {tablename} VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
-        c.execute(add, (id, row, col, toplx, toply, toprx, topry, botlx, botly, botrx, botry, centroidx, centroidy))
+        c.execute(add, (hid, row, col, coord1x, coord1y, coord2x, coord2y, coord3x, coord3y, coord4x, coord4y, centx, centy))
     except conn.Error as e:
         conn.commit()
         conn.close()
@@ -299,21 +299,21 @@ def addEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: f
     conn.close()
 
 # edit a table entry based on headstone id.
-def editEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: float, toprx: float, topry: float, botlx: float, botly: float, botrx: float, botry: float, centroidx: float, centroidy: float) -> None:
-    #row, col, toplx, toply, toprx, topry, botlx, botly, botrx, botry, centroidx, centroidy = values.split(',')
+def editEntry(tablename: str, hid: int, row: int, col: int, coord1x: float, coord1y: float, coord2x: float, coord2y: float, coord3x: float, coord3y: float, coord4x: float, coord4y: float, centx: float, centy: float) -> None:
+    #row, col, coord1x, coord1y, coord2x, coord2y, coord3x, coord3y, coord4x, coord4y, centx, centy = values.split(',')
     if not isValidCemetery(tablename):
         return
-    if not isValidID(id):
+    if not isValidID(hid):
         return 
     if not isValidOrder(row) or not isValidOrder(col):
         return 
-    if not isValidCoord(toplx) or not isValidCoord(toply) or not isValidCoord(toprx) or not isValidCoord(topry) or not isValidCoord(botlx) or not isValidCoord(botly) or not isValidCoord(botrx) or not isValidCoord(botry) or not isValidCoord(centroidx) or not isValidCoord(centroidy):
+    if not isValidCoord(coord1x) or not isValidCoord(coord1y) or not isValidCoord(coord2x) or not isValidCoord(coord2y) or not isValidCoord(coord3x) or not isValidCoord(coord3y) or not isValidCoord(coord4x) or not isValidCoord(coord4y) or not isValidCoord(centx) or not isValidCoord(centy):
         return
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
     try:
-        edit = f"UPDATE {tablename} SET row = ?, col = ?, toplx = ?, toply = ?, toprx = ?, topry = ?, botlx = ?, botly = ?, botrx = ?, botry = ?, centroidx = ?, centroidy = ? WHERE id = ?" 
-        c.execute(edit, (row, col, toplx, toply, toprx, topry, botlx, botly, botrx, botry, centroidx, centroidy, id))
+        edit = f"UPDATE {tablename} SET row = ?, col = ?, coord1x = ?, coord1y = ?, coord2x = ?, coord2y = ?, coord3x = ?, coord3y = ?, coord4x = ?, coord4y = ?, centx = ?, centy = ? WHERE id = ?" 
+        c.execute(edit, (row, col, coord1x, coord1y, coord2x, coord2y, coord3x, coord3y, coord4x, coord4y, centx, centy, hid))
     except conn.Error as e:
         conn.commit()
         conn.close()
@@ -328,14 +328,14 @@ def editEntry(tablename: str, id: int, row: int, col: int, toplx: float, toply: 
     conn.close()
 
 # delete a table entry based on headstone id.
-def deleteEntry(tablename: str, id: int) -> None:
-    if not isValidID(id):
+def deleteEntry(tablename: str, hid: int) -> None:
+    if not isValidID(hid):
         return 
     conn = sqlite3.connect(cemetery)
     c = conn.cursor()
     try:
         delete = f"DELETE FROM {tablename} WHERE id = ?;" 
-        c.execute(delete, (id,))
+        c.execute(delete, (hid,))
     except conn.Error as e:
         conn.commit()
         conn.close()
@@ -408,16 +408,16 @@ def orderTable(tablename: str, feature: str, sort: str) -> list:
     return result
 
 # convert a pandas dataframe into gejson format.
-def df_to_geojson(df, properties, toplx = 'toplx', toply = 'toply', toprx = 'toprx', topry = 'topry', botlx = 'botlx', botly = 'botly', botrx = 'botrx', botry = 'botry', centroidx = 'centroidx', centroidy = 'centroidy') -> dict:
+def df_to_geojson(df, properties, coord1x = 'coord1x', coord1y = 'coord1y', coord2x = 'coord2x', coord2y = 'coord2y', coord3x = 'coord3x', coord3y = 'coord3y', coord4x = 'coord4x', coord4y = 'coord4y', centx = 'centx', centy = 'centy') -> dict:
     geojson = {'type':'FeatureCollection', 'name': '', 'features':[]}
     for _, row in df.iterrows():
         feature = {'type':'Feature', 'properties':{}, 'geometry':{'type':'MultiPolygon', 'coordinates':[]}}
-        feature['geometry']['coordinates'] = [[[row[toplx], row[toply]],[row[toprx], row[topry]], [row[botlx], row[botly]], [row[botrx], row[botry]], [row[toplx], row[toply]]]]
+        feature['geometry']['coordinates'] = [[[row[coord1x], row[coord1y]],[row[coord2x], row[coord2y]], [row[coord3x], row[coord3y]], [row[coord4x], row[coord4y]], [row[coord1x], row[coord1y]]]]
         for prop in properties:
             if prop == 'id' or prop == 'row' or prop == 'col':
                 feature['properties'][prop] = int(row[prop])
             elif prop == 'centroid':
-                feature['properties'][prop] = [row[centroidx], row[centroidy]]
+                feature['properties'][prop] = [row[centx], row[centy]]
             else:
                 feature['properties'][prop] = row[prop]
         geojson['features'].append(feature)
@@ -442,6 +442,7 @@ def exportTable(tablename: str) -> None:
     conn.commit()
     conn.close()
     properties = ['id', 'row', 'col', 'centroid']
+    print(df)
     geojson = df_to_geojson(df, properties)
     with open(output_filename, 'w') as output_file:
         json.dump(geojson, output_file, indent = 2)
